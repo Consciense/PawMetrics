@@ -1,0 +1,39 @@
+package barnyard.pawmetrics.domain.entity;
+
+import barnyard.pawmetrics.domain.model.Role;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Set;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@Builder
+@Entity
+public class Account implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String login;
+
+    @Column(unique = true, nullable = false)
+    private String password;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column
+    private String photo;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(nullable = false)
+    private Set<Role> authorities;
+}
