@@ -13,6 +13,7 @@
     <form th:action="@{/account/registration}" th:object="${registrationDTO}" method="post" class="mt-4">
 
         <input type="text" name="username" placeholder="Username">
+        <input type="text" name="email" placeholder="email">
         <input type="text" name="password" placeholder="password">
         <input type="text" name="confirmPassword" placeholder="confirm password">
         <button type="submit" class="btn btn-primary">Регистрация</button>

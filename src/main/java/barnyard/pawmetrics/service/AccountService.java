@@ -22,13 +22,13 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private AccountRepository repository;
     @Autowired
-    AccountMapper mapper;
+    private AccountMapper accountMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Transactional
     public void create(RegistrationDTO dto) {
-        Account user = mapper.toEntity(dto);
+        Account user = accountMapper.toEntity(dto);
         user.setAuthorities(Set.of(Role.USER));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
