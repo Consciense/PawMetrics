@@ -1,5 +1,6 @@
 package barnyard.pawmetrics.controller;
 
+import barnyard.pawmetrics.domain.dto.LoginDTO;
 import barnyard.pawmetrics.domain.dto.RegistrationDTO;
 import barnyard.pawmetrics.repository.AccountRepository;
 import barnyard.pawmetrics.service.AccountService;
@@ -17,6 +18,8 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private AccountRepository repository;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @GetMapping("/registration")
     public String registration(@ModelAttribute RegistrationDTO registrationDTO) {
@@ -44,21 +47,24 @@ public class AccountController {
         return "redirect:/account/login";
     }
 
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login";
-//    }
-//
-//    @PostMapping("/login")
-//    public String login(@Valid LoginDTO loginDTO, Model model) {
-//        if(accountService.login(loginDTO)){
-//            return "redirect:/";
-//        } else {
-//            model.addAttribute("WrongUsernameOrPassword", "Wrong username or password");
-//            return "login";
-//        }
-//    }
-//
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Valid LoginDTO loginDTO, Model model) {
+        if (accountService.login(loginDTO))
+            return "redirect:/";
+        else {
+            if (!accountRepository.existsByUsername(loginDTO.getUsername()))
+                model.addAttribute("errorMessage", "Incorrect username");
+            else
+                model.addAttribute("errorMessage", "Incorrect password");
+            return "login";
+        }
+    }
+
 //    @GetMapping("/edit")
 //    public String edit() {
 //        return "edit";
