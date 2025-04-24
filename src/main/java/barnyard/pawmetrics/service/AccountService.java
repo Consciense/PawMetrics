@@ -1,5 +1,6 @@
 package barnyard.pawmetrics.service;
 
+import barnyard.pawmetrics.domain.dto.LoginDTO;
 import barnyard.pawmetrics.domain.dto.RegistrationDTO;
 import barnyard.pawmetrics.domain.entity.Account;
 import barnyard.pawmetrics.domain.model.Role;
@@ -34,6 +35,14 @@ public class AccountService implements UserDetailsService {
         repository.save(user);
     }
 
+    public boolean login(LoginDTO loginDTO) {
+        if (repository.existsByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword())) {
+            loadUserByUsername(loginDTO.getUsername());
+            return true;
+        }
+        return false;
+    }
+
 //    public Account getByUsername(String username) {
 //        return repository.findByUsername(username)
 //                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
@@ -41,15 +50,6 @@ public class AccountService implements UserDetailsService {
 
 //    public Account getCurrentUser() {
 //        return getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-//    }
-//
-//
-//    public boolean login(LoginDTO loginDTO) {
-//        if (repository.existsByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword())) {
-//
-//            return true;
-//        }
-//        return false;
 //    }
 //
 //    public Account edit(Account user) {
