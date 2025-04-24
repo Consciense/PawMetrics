@@ -32,6 +32,10 @@ public class AccountController {
             bindingResult.rejectValue("confirmPassword", "Passwords do not match");
             return "registration";
         }
+        if (repository.existsByEmail(dto.getEmail())) {
+            bindingResult.rejectValue("email", "Email address already in use");
+            return "registration";
+        }
         if (repository.existsByUsername(dto.getUsername())) {
             model.addAttribute("errorMessage", "Username is already in use");
             return "registration";
