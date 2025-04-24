@@ -8,6 +8,7 @@ import barnyard.pawmetrics.mapper.AccountMapper;
 import barnyard.pawmetrics.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,14 +44,14 @@ public class AccountService implements UserDetailsService {
         return false;
     }
 
-//    public Account getByUsername(String username) {
-//        return repository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-//    }
+    public Account getByUsername(String username) {
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+    }
 
-//    public Account getCurrentUser() {
-//        return getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-//    }
+    public Account getCurrentUser() {
+        return getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
 //
 //    public Account edit(Account user) {
 //        Account currentUser = getCurrentUser();
@@ -71,5 +72,9 @@ public class AccountService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public boolean havePermissionToDelete(String username) {
+        return repository.existsByUsername(username) && getCurrentUser().getUsername().equals(username);
     }
 }
