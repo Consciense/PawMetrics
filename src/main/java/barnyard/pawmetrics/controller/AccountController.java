@@ -18,8 +18,6 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private AccountRepository repository;
-    @Autowired
-    private AccountRepository accountRepository;
 
     @GetMapping("/registration")
     public String registration(@ModelAttribute RegistrationDTO registrationDTO) {
@@ -57,7 +55,7 @@ public class AccountController {
         if (accountService.login(loginDTO))
             return "redirect:/";
         else {
-            if (!accountRepository.existsByUsername(loginDTO.getUsername()))
+            if (!repository.existsByUsername(loginDTO.getUsername()))
                 model.addAttribute("errorMessage", "Incorrect username");
             else
                 model.addAttribute("errorMessage", "Incorrect password");
@@ -65,6 +63,19 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/delete")
+    public String delete() {
+        return "delete";
+    }
+    @PostMapping("/delete")
+    public String delete(@RequestParam String username, Model model) {
+        if (!accountService.havePermissionToDelete(username)) {
+            model.addAttribute("errorMessage", "Wrong username");
+            return "delete";
+        }
+        repository.delete(accountService.getByUsername(username));
+        return "redirect:/";
+    }
 //    @GetMapping("/edit")
 //    public String edit() {
 //        return "edit";
@@ -75,13 +86,5 @@ public class AccountController {
 //        accountService.edit(account);
 //        return "redirect:/";
 //    }
-//
-//    @GetMapping
-//    public String delete() {
-//        return "deleteAccount";
-//    }
-//    @DeleteMapping
-//    public String delete(Account account) {
-//        return "redirect:/";
-//    }
+
 }
