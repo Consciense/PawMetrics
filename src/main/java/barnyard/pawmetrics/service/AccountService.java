@@ -8,6 +8,7 @@ import barnyard.pawmetrics.domain.entity.Pet;
 import barnyard.pawmetrics.domain.enums.Role;
 import barnyard.pawmetrics.mapper.AccountMapper;
 import barnyard.pawmetrics.repository.AccountRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +40,7 @@ public class AccountService implements UserDetailsService {
         repository.save(user);
     }
 
-    public boolean login(LoginDTO loginDTO) {
+    public boolean login(@NotNull LoginDTO loginDTO) {
         if (repository.existsByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword())) {
             loadUserByUsername(loginDTO.getUsername());
             return true;
@@ -79,6 +80,14 @@ public class AccountService implements UserDetailsService {
         Account currentUser = getCurrentUser();
         ArrayList<Pet> pets = currentUser.getPets();
         pets.add(pet);
+        currentUser.setPets(pets);
+        repository.save(currentUser);
+    }
+
+    public void deletePet(String name){
+        Account currentUser = getCurrentUser();
+        ArrayList<Pet> pets = currentUser.getPets();
+        pets.removeIf(pet -> pet.getName().equals(name));
         currentUser.setPets(pets);
         repository.save(currentUser);
     }
