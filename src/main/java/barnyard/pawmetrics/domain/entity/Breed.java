@@ -4,15 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class PetType {
+@ToString
+public class Breed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int breedId;
     @Column(nullable = false)
-    private String petTypeName;
+    private String breedName;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private String defaultPicture;
 }
