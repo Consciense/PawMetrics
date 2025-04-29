@@ -31,7 +31,8 @@ public class Account implements UserDetails {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id")
     private ArrayList<Pet> pets;
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -2,7 +2,9 @@ package barnyard.pawmetrics.mapper;
 
 import barnyard.pawmetrics.domain.dto.PetDTO;
 import barnyard.pawmetrics.domain.entity.Pet;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PetMapperImplemented implements PetMapper {
 
     @Override
