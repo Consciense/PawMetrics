@@ -1,10 +1,11 @@
 package barnyard.pawmetrics.domain.entity;
 
-import barnyard.pawmetrics.domain.model.Role;
+import barnyard.pawmetrics.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -29,6 +30,9 @@ public class Account implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String username;
+
+    @OneToMany(mappedBy = "account")
+    private ArrayList<Pet> pets;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = false)

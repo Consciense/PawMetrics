@@ -1,4 +1,4 @@
-package barnyard.pawmetrics.domain.model;
+package barnyard.pawmetrics.domain.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

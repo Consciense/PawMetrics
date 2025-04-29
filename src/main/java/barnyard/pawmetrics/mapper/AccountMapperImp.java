@@ -12,33 +12,22 @@ public class AccountMapperImp implements AccountMapper {
         if (dto == null) {
             return null;
         } else {
-            Account user = new Account();
-            user.setUsername(dto.getUsername());
-            user.setPassword(dto.getPassword());
-            user.setEmail(dto.getEmail());
-            return user;
+            return Account.builder()
+                    .username(dto.getUsername())
+                    .password(dto.getPassword())
+                    .email(dto.getEmail())
+                    .build();
         }
     }
 
-//    @Override
-//    public AccountDTO toDTO(Account user) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void update(Account account, AccountDTO dto) {
-//        if (dto == null) {
-//            return;
-//        } else {
-//            Account user = new Account();
-//            user.setUsername(dto.getUsername());
-//            user.setPassword(dto.getPassword());
-//            return user;
-//        }
-//    }
-//
-//    @Override
-//    public Account partialUpdate(AccountDTO userDto, Account user) {
-//        return null;
-//    }
+    @Override
+    public Account update(Account account, AccountDTO dto) {
+        if (dto == null) {
+            return null;
+        } else {
+            account.setUsername(dto.getUsername());
+            account.setEmail(dto.getEmail());
+            return account;
+        }
+    }
 }

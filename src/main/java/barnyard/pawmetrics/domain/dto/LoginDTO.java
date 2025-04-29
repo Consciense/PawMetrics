@@ -11,11 +11,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class AccountDTO {
-    @NotNull
-    @NotBlank
-    private String email;
-    @NotNull
-    @NotBlank
+public class LoginDTO {
     private String username;
+    @NotNull
+    @NotBlank
+    private String password;
 }

@@ -11,11 +11,5 @@ import org.mapstruct.*;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AccountMapper {
     Account toEntity(RegistrationDTO dto);
-//
-//    AccountDTO toDTO(Account user);
-//
-//    void update(@MappingTarget Account account, AccountDTO dto);
-//
-//    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-//    Account partialUpdate(AccountDTO userDto, @MappingTarget Account user);
+    Account update(@MappingTarget Account account, AccountDTO dto);
 }
