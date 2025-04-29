@@ -1,5 +1,6 @@
 package barnyard.pawmetrics.controller;
 
+
 import barnyard.pawmetrics.domain.dto.AccountDTO;
 import barnyard.pawmetrics.domain.dto.LoginDTO;
 import barnyard.pawmetrics.domain.dto.RegistrationDTO;
@@ -68,7 +69,6 @@ public class AccountController {
     public String delete() {
         return "deleteAccount";
     }
-
     @PostMapping("/delete")
     public String delete(@RequestParam String username, Model model) {
         if (!accountService.havePermissionToDelete(username)) {
@@ -78,7 +78,7 @@ public class AccountController {
         repository.delete(accountService.getByUsername(username));
         return "redirect:/";
     }
-
+  
     @GetMapping("/edit")
     public String edit() {
         return "editAccount";
@@ -104,5 +104,4 @@ public class AccountController {
         accountService.update(dto);
         return "redirect:/account";
     }
-
 }
