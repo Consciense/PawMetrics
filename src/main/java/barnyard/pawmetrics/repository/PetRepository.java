@@ -1,0 +1,11 @@
+package barnyard.pawmetrics.repository;
+
+import barnyard.pawmetrics.domain.entity.Pet;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PetRepository extends JpaRepository<Pet, Long> {
+
+    void deletePetByName(String name);
+}
