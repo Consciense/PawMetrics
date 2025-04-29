@@ -1,5 +1,7 @@
 package barnyard.pawmetrics.controller;
 
+
+import barnyard.pawmetrics.domain.dto.AccountDTO;
 import barnyard.pawmetrics.domain.dto.LoginDTO;
 import barnyard.pawmetrics.domain.dto.RegistrationDTO;
 import barnyard.pawmetrics.repository.AccountRepository;
@@ -65,26 +67,41 @@ public class AccountController {
 
     @GetMapping("/delete")
     public String delete() {
-        return "delete";
+        return "deleteAccount";
     }
     @PostMapping("/delete")
     public String delete(@RequestParam String username, Model model) {
         if (!accountService.havePermissionToDelete(username)) {
             model.addAttribute("errorMessage", "Wrong username");
-            return "delete";
+            return "deleteAccount";
         }
         repository.delete(accountService.getByUsername(username));
         return "redirect:/";
     }
-//    @GetMapping("/edit")
-//    public String edit() {
-//        return "edit";
-//    }
-//
-//    @PutMapping("/edit")
-//    public String edit(Account account) {
-//        accountService.edit(account);
-//        return "redirect:/";
-//    }
+  
+    @GetMapping("/edit")
+    public String edit() {
+        return "editAccount";
+    }
 
+    @PostMapping("/edit/password")
+    public String editPassword(@RequestParam String password) {
+        accountService.updatePassword(password);
+        return "redirect:/account/";
+    }
+
+    @PostMapping("/edit/photo")
+    public String editPhoto(@RequestParam String photo) {
+        accountService.updatePhoto(photo);
+        return "redirect:/account";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@Valid @ModelAttribute AccountDTO dto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "editAccount";
+        }
+        accountService.update(dto);
+        return "redirect:/account";
+    }
 }

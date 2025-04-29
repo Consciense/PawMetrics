@@ -14,14 +14,7 @@ import lombok.ToString;
 public class AccountDTO {
     @NotNull
     @NotBlank
-    private Long id;
-    @NotNull
-    @NotBlank
     private String email;
-    private String photo;
-    @NotNull
-    @NotBlank
-    private String password;
     @NotNull
     @NotBlank
     private String username;
