@@ -1,27 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login page</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container">
-  <h2 class="mt-5">Вход</h2>
+<div style="background-image: url(https://static.vecteezy.com/system/resources/previews/055/400/183/large_2x/black-paw-print-design-on-white-background-perfect-for-pet-lovers-vector.jpg)">
+    <div class="container align-items-center vh-100">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-4 rounded p-2"
+                 style="background: rgba(180,186,193,0.5); border-radius: 60px">
+                <h3 class="mt-3">Login</h3><hr>
+                <form th:action="@{/account/login}" th:object="${dto}" method="post" class="mt-4">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" th:field="*{username}" id="username" placeholder="Username">
+                        <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="password">
+                        <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    </div>
+                    <button type="submit" class="btn btn-secondary ">Submit</button>
+                </form>
+                <div class="mt-3">
+                    <h5>No account? </h5>
+                    <a class="mb-2" th:href="@{/account/registration}" style="color: rgba(15,110,193,0.5)"> Sign Up!</a>
+                </div>
+            </div>
 
-  <form th:action="@{/account/login}" th:object="${loginDTO}" method="post" class="mt-4">
-
-    <input type="text" name="username" placeholder="Username">
-    <input type="text" name="password" placeholder="password">
-    <button type="submit" class="btn btn-primary">Войти</button>
-  </form>
-  <div class="mt-3">
-    <a th:href="@{/account/registration}">Зарегистрироваться</a>
-  </div>
+        </div>
+    </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div th:insert="jsImport"></div>
 </body>
 </html>
