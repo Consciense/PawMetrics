@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,5 +31,5 @@ public class PetDTO {
     @NotNull
     @NotBlank
     private Breed breed;
-    private ArrayList<PetImage> image;
+    private List<PetImage> image = new ArrayList<>();
 }

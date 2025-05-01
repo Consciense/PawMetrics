@@ -22,12 +22,12 @@ public class AccountController {
     private AccountRepository repository;
 
     @GetMapping("/registration")
-    public String registration(@ModelAttribute RegistrationDTO registrationDTO) {
+    public String registration(@ModelAttribute("dto") RegistrationDTO dto) {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@Valid @ModelAttribute RegistrationDTO dto, BindingResult bindingResult, Model model) {
+    public String registration(@Valid @ModelAttribute("dto") RegistrationDTO dto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
@@ -48,16 +48,16 @@ public class AccountController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@ModelAttribute("dto") LoginDTO dto) {
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginDTO loginDTO, Model model) {
-        if (accountService.login(loginDTO))
-            return "redirect:/";
+    public String login(@Valid @ModelAttribute("dto") LoginDTO dto, Model model) {
+        if (accountService.login(dto))
+            return "redirect:/home";
         else {
-            if (!repository.existsByUsername(loginDTO.getUsername()))
+            if (!repository.existsByUsername(dto.getUsername()))
                 model.addAttribute("errorMessage", "Incorrect username");
             else
                 model.addAttribute("errorMessage", "Incorrect password");

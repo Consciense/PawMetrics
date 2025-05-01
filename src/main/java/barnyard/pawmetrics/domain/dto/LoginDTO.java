@@ -12,6 +12,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class LoginDTO {
+    @NotNull
+    @NotBlank
     private String username;
     @NotNull
     @NotBlank

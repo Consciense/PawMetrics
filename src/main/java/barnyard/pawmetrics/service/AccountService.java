@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -78,7 +78,7 @@ public class AccountService implements UserDetailsService {
 
     public void updatePets(Pet pet) {
         Account currentUser = getCurrentUser();
-        ArrayList<Pet> pets = currentUser.getPets();
+        List<Pet> pets = currentUser.getPets();
         pets.add(pet);
         currentUser.setPets(pets);
         repository.save(currentUser);
@@ -86,7 +86,7 @@ public class AccountService implements UserDetailsService {
 
     public void deletePet(String name){
         Account currentUser = getCurrentUser();
-        ArrayList<Pet> pets = currentUser.getPets();
+        List<Pet> pets = currentUser.getPets();
         pets.removeIf(pet -> pet.getName().equals(name));
         currentUser.setPets(pets);
         repository.save(currentUser);
