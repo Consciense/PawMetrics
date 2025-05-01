@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -42,5 +43,5 @@ public class Pet {
     private Breed breed;
 
     @OneToMany(mappedBy = "pet")
-    private ArrayList<PetImage> image;
+    private List<PetImage> image = new ArrayList<>();
 }

@@ -12,26 +12,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.String.format;
 
 @Controller
-@RequestMapping("/pet")
+@RequestMapping("/pets")
 public class PetController {
     @Autowired
     private PetService petService;
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/")
+    @GetMapping
     public String pet(Model model) {
+        model.addAttribute("loggedIn", true);
         return "pet";
     }
 
     @PostMapping("/add")
     public String addPet(PetDTO dto, Model model, BindingResult bindingResult) {
-        ArrayList<Pet> pets = accountService.getCurrentUser().getPets();
+        List<Pet> pets = accountService.getCurrentUser().getPets();
         if (pets.stream().map(Pet::getName).anyMatch(petName -> petName.equals(dto.getName()))) {
             bindingResult.rejectValue("name", format("Pet named as %s already exists", dto.getName()));
             return "pet";

@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -31,9 +32,9 @@ public class Account implements UserDetails {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "account_id")
-    private ArrayList<Pet> pets;
+    @Column
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private List<Pet> pets = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = false)
