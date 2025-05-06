@@ -27,14 +27,18 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/account/registration", "/account/login").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(httpSecurityFormLoginConfigurer ->
                         httpSecurityFormLoginConfigurer.loginPage("/account/login"))
                 .logout(httpSecurityLogoutConfigurer ->
-                        httpSecurityLogoutConfigurer.logoutSuccessUrl("/account/login"));
+                        httpSecurityLogoutConfigurer
+                                .logoutUrl("/account/logout")
+                                .deleteCookies("JSESSIONID")
+                                .invalidateHttpSession(true)
+                                .logoutSuccessUrl("/account/login"));
         return http.build();
     }
 

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div style="background-image: url(https://static.vecteezy.com/system/resources/previews/055/400/183/large_2x/black-paw-print-design-on-white-background-perfect-for-pet-lovers-vector.jpg)">
+<div>
     <div class="container align-items-center vh-100">
         <div class="row justify-content-center align-items-center vh-100">
             <div class="col-4 rounded p-2"
@@ -35,7 +35,7 @@
                         <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirm password">
                         <div style="color: red" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
                     </div>
-                    <button type="submit" class="btn btn-secondary ">Submit</button>
+                    <button type="submit" class="btn btn-secondary ">Create account</button>
                 </form>
                 <div style="text-align: right">
                     <h6>Already registered? </h6>

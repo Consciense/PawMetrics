@@ -13,14 +13,27 @@ public class PetMapperImplemented implements PetMapper {
             return null;
         } else {
             return Pet.builder()
-                    .name(petDTO.getName()).
-                    weight(petDTO.getWeight())
+                    .name(petDTO.getName())
+                    .weight(petDTO.getWeight())
                     .age(petDTO.getAge())
-                    .type(petDTO.getType())
                     .gender(petDTO.getGender())
+                    .type(petDTO.getType())
                     .breed(petDTO.getBreed())
                     .image(petDTO.getImage())
                     .build();
         }
+    }
+
+    @Override
+    public PetDTO toDTO(Pet pet) {
+        return PetDTO.builder()
+                .name(pet.getName())
+                .weight(pet.getWeight())
+                .age(pet.getAge())
+                .gender(pet.getGender())
+                .type(pet.getType())
+                .breed(pet.getBreed())
+                .image(pet.getImage())
+                .build();
     }
 }

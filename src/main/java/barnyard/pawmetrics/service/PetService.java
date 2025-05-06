@@ -7,6 +7,7 @@ import barnyard.pawmetrics.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,16 +22,22 @@ public class PetService {
     private AccountService accountService;
 
     public void savePet(PetDTO dto) {
-        petRepository.save(petMapper.toEntity(dto));
-        accountService.updatePets(petMapper.toEntity(dto));
+        Pet pet = petMapper.toEntity(dto);
+        pet.setOwner(accountService.getCurrentUser());
+        petRepository.save(pet);
     }
 
     public List<Pet> getAccountPets() {
         return accountService.getCurrentUser().getPets();
     }
 
-    public void deleteByName(String petName) {
-        accountService.deletePet(petName);
-        petRepository.deletePetByName(petName);
+    public Pet getPetById(Long petId) {
+        return petRepository.findById(petId).orElse(null);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        petRepository.deleteById(id);
     }
 }
+

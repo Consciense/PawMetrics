@@ -1,10 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div th:insert="~{header}"></div>
+<main>
+    <div class="d-flex justify-content-center">
+        <div class="col-3 mb-5 mx-4 p-4 rounded scrollarea border border-secondary-subtle"
+             style="height: 30vh; border-radius: 35px">
+            <div class="fs-4"> Add pet type</div>
+            <hr>
+            <form th:action="@{/admin/addPetType}" th:object="${petType}" method="post" class="mt-4">
+                <div class="mb-3">
+                    <label for="petTypeName" class="form-label">Input new pet type to add</label>
+                    <input type="text" class="form-control" th:field="*{petTypeName}" id="petTypeName" placeholder="Pet type">
+                </div>
+                    <button type="submit" class="col-12  btn btn-outline-dark">Add</button>
+            </form>
+        </div>
 
+
+        <div class="col-3 mb-4 mx-4 p-4 rounded scrollarea border border-secondary-subtle"
+             style="border-radius: 35px">
+            <div class="fs-4"> Add breed</div>
+            <hr>
+            <form th:action="@{/admin/addBreed}" th:object="${breed}" method="post" class="mt-4">
+                <div class="mb-3">
+                    <label for="petType" class="form-label my-1">Select pet type</label>
+                    <select id="petType" name="petType" th:field="*{petType}" class="col-12 form-select my-1">
+                        <option disabled selected hidden style="display: none" value=""></option>
+                        <option th:each="petType: ${petTypes}"
+                                th:value="${petType.getId()}"
+                                th:text="${petType.getPetTypeName()}"
+                                th:data="${petType}"></option>
+                    </select>
+
+                    <label for="breedName" class="form-label">Input new breed name</label>
+                    <input type="text" class="form-control my-1" th:field="*{breedName}" id="breedName" placeholder="New breed name">
+
+                    <label for="description" class="form-label my-1">Breed description</label>
+                    <textarea class="form-control my-1" th:field="*{description}" id="description" rows="3" placeholder="They are really cool btw..."></textarea>
+
+                    <label for="defaultPicture" class="form-label my-1">Input photo url</label>
+                    <input type="text" class="form-control my-1" th:field="*{defaultPicture}" id="defaultPicture" placeholder="url">
+                </div>
+                <button type="submit" class="col-12 btn btn-outline-dark">Add</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+<!--    <div class="d-flex justify-content-center">-->
+<!--        <div class="col-3 mb-4 mx-4 p-4 rounded scrollarea border border-secondary-subtle"-->
+<!--             style="height: 30vh; border-radius: 15px">-->
+<!--            <div class="fs-4"> Delete pet type</div>-->
+<!--            <hr>-->
+<!--            <form th:action="@{/admin/deletePetType}" th:object="${petType}" method="post" class="mt-4">-->
+<!--                <div class="mb-3">-->
+<!--                    <label for="petTypeName2" class="form-label">Username</label>-->
+<!--                    <input type="text" class="form-control" th:field="*{petTypeName2}" id="petTypeName2" placeholder="Pet type">-->
+<!--                </div>-->
+<!--                <div class="col-12">-->
+<!--                    <button type="submit" class="btn btn-outline-dark" style="width: inherit">Add</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+
+
+
+
+<!--        <div class="col-3 mb-4 mx-4 p-4 rounded scrollarea border border-secondary-subtle"-->
+<!--             style="height: 30vh; border-radius: 15px">-->
+<!--            <div class="fs-4"> Delete breed</div>-->
+<!--            <hr>-->
+<!--            <div class="col-12">-->
+<!--                <button type="submit" class="btn btn-outline-dark" style="width: inherit">Add</button>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+</main>
+<div th:insert="~{jsImport}"></div>
 </body>
 </html>

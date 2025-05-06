@@ -4,10 +4,15 @@ package barnyard.pawmetrics.controller;
 import barnyard.pawmetrics.domain.dto.AccountDTO;
 import barnyard.pawmetrics.domain.dto.LoginDTO;
 import barnyard.pawmetrics.domain.dto.RegistrationDTO;
+import barnyard.pawmetrics.domain.entity.Account;
 import barnyard.pawmetrics.repository.AccountRepository;
 import barnyard.pawmetrics.service.AccountService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,12 +70,23 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            request.getSession().invalidate();
+            return "redirect:/";
+        }
+        return "redirect:/";
+    }
+
     @GetMapping("/delete")
-    public String delete() {
+    public String delete(@AuthenticationPrincipal Account currentUser) {
         return "deleteAccount";
     }
+
     @PostMapping("/delete")
-    public String delete(@RequestParam String username, Model model) {
+    public String delete(@AuthenticationPrincipal Account currentUser, @RequestParam String username, Model model) {
         if (!accountService.havePermissionToDelete(username)) {
             model.addAttribute("errorMessage", "Wrong username");
             return "deleteAccount";
@@ -78,26 +94,26 @@ public class AccountController {
         repository.delete(accountService.getByUsername(username));
         return "redirect:/";
     }
-  
+
     @GetMapping("/edit")
-    public String edit() {
+    public String edit(@AuthenticationPrincipal Account currentUser) {
         return "editAccount";
     }
 
     @PostMapping("/edit/password")
-    public String editPassword(@RequestParam String password) {
+    public String editPassword(@AuthenticationPrincipal Account currentUser, @RequestParam String password) {
         accountService.updatePassword(password);
         return "redirect:/account/";
     }
 
     @PostMapping("/edit/photo")
-    public String editPhoto(@RequestParam String photo) {
+    public String editPhoto(@AuthenticationPrincipal Account currentUser, @RequestParam String photo) {
         accountService.updatePhoto(photo);
         return "redirect:/account";
     }
 
     @PostMapping("/edit")
-    public String edit(@Valid @ModelAttribute AccountDTO dto, BindingResult bindingResult, Model model) {
+    public String edit(@AuthenticationPrincipal Account currentUser, @Valid @ModelAttribute AccountDTO dto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "editAccount";
         }

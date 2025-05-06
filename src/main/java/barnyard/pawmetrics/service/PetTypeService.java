@@ -5,6 +5,7 @@ import barnyard.pawmetrics.repository.PetTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,11 +15,14 @@ public class PetTypeService {
     @Autowired
     private PetTypeRepository petTypeRepository;
 
-    public void add(PetType petType) {
-        if (!petTypeRepository.existsByPetTypeName(petType.getPetTypeName())) {
+    @Transactional
+    public void add(PetType petTypeName) {
+        if (petTypeRepository.existsByPetTypeName(petTypeName.getPetTypeName())) {
+            throw new RuntimeException("Pet type already exists");
+        } else {
+            PetType petType = PetType.builder().petTypeName(petTypeName.getPetTypeName()).build();
             petTypeRepository.save(petType);
         }
-        else throw new RuntimeException("Pet type already exists");
     }
 
     public List<PetType> getAllTypes() {

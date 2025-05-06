@@ -13,4 +13,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PetMapper {
     Pet toEntity(PetDTO petDTO);
+    PetDTO toDTO(Pet pet);
 }

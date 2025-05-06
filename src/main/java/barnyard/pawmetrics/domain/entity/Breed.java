@@ -13,6 +13,9 @@ public class Breed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int breedId;
+    @ManyToOne
+    @JoinColumn(name = "pet_type_id")
+    private PetType petType;
     @Column(nullable = false)
     private String breedName;
     @Column(nullable = false)

@@ -5,6 +5,7 @@ import barnyard.pawmetrics.repository.BreedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class BreedService {
     @Autowired
     private BreedRepository breedRepository;
 
+    @Transactional
     public void add(Breed breed) {
         if (!breedRepository.existsByBreedName(breed.getBreedName())) {
             breedRepository.save(breed);
@@ -25,7 +27,7 @@ public class BreedService {
         return breedRepository.findByBreedName(breedName).orElseThrow(() -> new RuntimeException("Breed not found"));
     }
 
-    public List<Breed> findAll() {
+    public List<Breed> getAll() {
         return breedRepository.findAll();
     }
 

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:insert="~{header}"></div>
+<main>
+    <div class="container justify-content-center align-items-center vh-100">
+        <div class="d-flex justify-content-between">
+            <a class="col-6 btn btn-outline-primary mb-3 p-2" data-bs-toggle="modal" data-bs-target="#addTestModal">
+                Add new blood test result
+            </a>
+            <a class="col-6 btn btn-outline-primary mb-3 p-2" data-bs-toggle="modal" role="button"
+               data-bs-target="#petStatisticsModal">
+                Pet statistics
+            </a>
+        </div>
+
+        <div th:each="test : ${tests}" class="col-12 mb-3 p-4 rounded border border-secondary-subtle"
+             style="border-radius: 35px">
+            <div class="row ms-3">
+                <div class="d-flex flex-row align-items-center justify-content-evenly col-12">
+                    <img th:if="${test.pet.image == null}"
+                         src="https://img.freepik.com/free-vector/heart-with-paw-prints_78370-3260.jpg?semt=ais_hybrid&w=740"
+                         class="rounded-circle mx-4"
+                         alt="Pet photo" style="height: 10vh ">
+                    <img th:if="${test.pet.image!= null}" th:src="${test.pet.image}"
+                         class="rounded-circle mx-4"
+                         alt="Pet photo" style="height: 10vh ">
+                    <h3 class="my-3 col-6" th:text="${test.pet.name} + ' result (was added: ' + ${test.date} + ')'" ></h3>
+                    <a class="ms-4 col-2 btn btn-outline-primary p-2" data-bs-toggle="modal"
+                       th:attr="data-bs-target='#modal-data' + ${test.id}">View Details</a>
+                    <a class="ms-4 col-2 btn btn-outline-primary p-2" data-bs-toggle="modal"
+                       th:attr="data-bs-target='#modal-expalin' + ${test.id}">Get conclusion</a>
+                </div>
+            </div>
+
+<!--            analyse modal-->
+            <div class="modal modal fade" tabindex="-1" th:id="modal-expalin+${test.id}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Test results</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h5 th:text="${conclusions.get(test.id)}"></h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--            result modal-->
+            <div class="modal modal fade" tabindex="-1" th:id="modal-data+${test.id}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Test results</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Blood parameter</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Measurement unit</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Erythrocytes</td>
+                                    <td th:text="${test.erythrocytes}"></td>
+                                    <td>c/l</td>
+                                </tr>
+                                <tr>
+                                    <td>Hemoglobin</td>
+                                    <td th:text="${test.hemoglobin}"></td>
+                                    <td>g/l</td>
+                                </tr>
+                                <tr>
+                                    <td>Leukocytes</td>
+                                    <td th:text="${test.leukocytes}"></td>
+                                    <td>c/l</td>
+                                </tr>
+                                <tr>
+                                    <td>Neutrophils</td>
+                                    <td th:text="${test.neutrophils}"></td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>Lymphocytes</td>
+                                    <td th:text="${test.lymphocytes}"></td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>Monocytes</td>
+                                    <td th:text="${test.monocytes}"></td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>Eosinophils</td>
+                                    <td th:text="${test.eosinophils}"></td>
+                                    <td>%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pet Statistics Modal  -->
+    <div class="modal fade" id="petStatisticsModal" tabindex="-1" aria-labelledby="petStatisticsModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-3" id="petStatisticsModalLabel">Get pet statistics</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/tests/petStatistics}" th:object="${dto}" method="get">
+                        <label for="petType" class="form-label my-1">Select pet</label>
+                        <select id="petType" name="petType" th:field="*{petId}" class="col-12 form-select my-2">
+                            <option disabled selected hidden style="display: none" value=""></option>
+                            <option th:each="pet: ${pets}"
+                                    th:value="${pet.getId()}"
+                                    th:text="${pet.getName()}"
+                                    th:data="${pet.getId()}"></option>
+                        </select>
+                        <button type="submit" class="col-12 btn btn-outline-secondary my-3">Get</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- add test modal-->
+    <div class="modal fade" id="addTestModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-3" id="staticBackdropLabel">New blood test</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/tests/add}" th:object="${dto}" method="post">
+                        <label for="pet" class="form-label my-1">Select pet</label>
+                        <select id="pet" name="pet" th:field="*{petId}" class="col-12 form-select my-1">
+                            <option disabled selected hidden style="display: none" value=""></option>
+                            <option th:each="pet: ${pets}"
+                                    th:value="${pet.getId()}"
+                                    th:text="${pet.getName()}"
+                                    th:data="${pet.getId()}"></option>
+                        </select>
+
+                        <label for="erythrocytes" class="form-label my-1">Input erythrocytes result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{erythrocytes}"
+                               id="erythrocytes" placeholder="5,09">
+
+
+                        <label for="hemoglobin" class="form-label my-1">Input hemoglobin result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{hemoglobin}"
+                               id="hemoglobin"
+                               placeholder="10.7">
+
+                        <label for="leukocytes" class="form-label my-1">Input leukocytes result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{leukocytes}"
+                               id="leukocytes" placeholder="17.1">
+
+
+                        <label for="neutrophils" class="form-label my-1">Input neutrophils result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{neutrophils}"
+                               id="neutrophils" placeholder="68">
+
+                        <label for="lymphocytes" class="form-label my-1">Input lymphocytes result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{lymphocytes}"
+                               id="lymphocytes" placeholder="24">
+
+
+                        <label for="monocytes" class="form-label my-1">Input platelets result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{monocytes}"
+                               id="monocytes"
+                               placeholder="6">
+
+                        <label for="eosinophils" class="form-label my-1">Input platelets result</label>
+                        <input type="number" step="0.01" class="form-control my-1" th:field="*{eosinophils}"
+                               id="eosinophils" placeholder="3">
+
+                        <label class="form-label my-2" for="date"> Select the date of analysis:</label>
+                        <input type="date" class="form-control my-1" th:field="*{date}" id="date"/>
+
+                        <button type="submit" class="col-12 btn btn-outline-secondary my-3">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:insert="~{jsImport}"></div>
+</body>
+</html>

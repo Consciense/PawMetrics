@@ -4,7 +4,6 @@ import barnyard.pawmetrics.domain.enums.PetGender;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,6 +41,9 @@ public class Pet {
     @JoinColumn(name = "breed_breed_id")
     private Breed breed;
 
-    @OneToMany(mappedBy = "pet")
-    private List<PetImage> image = new ArrayList<>();
+    @Column
+    private String image;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    private List<BloodTestResult> bloodTestResults;
 }

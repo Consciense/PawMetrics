@@ -4,7 +4,6 @@ import barnyard.pawmetrics.domain.dto.AccountDTO;
 import barnyard.pawmetrics.domain.dto.LoginDTO;
 import barnyard.pawmetrics.domain.dto.RegistrationDTO;
 import barnyard.pawmetrics.domain.entity.Account;
-import barnyard.pawmetrics.domain.entity.Pet;
 import barnyard.pawmetrics.domain.enums.Role;
 import barnyard.pawmetrics.mapper.AccountMapper;
 import barnyard.pawmetrics.repository.AccountRepository;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -57,6 +55,7 @@ public class AccountService implements UserDetailsService {
         return getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+    @Transactional
     public void updatePassword(String newPassword) {
         Account currentUser = getCurrentUser();
         if (currentUser.getPassword().equals(passwordEncoder.encode(newPassword))) {
@@ -66,38 +65,17 @@ public class AccountService implements UserDetailsService {
         repository.save(currentUser);
     }
 
+    @Transactional
     public void update(AccountDTO dto) {
-        repository.save(accountMapper.update(getCurrentUser(),dto));
+        repository.save(accountMapper.update(getCurrentUser(), dto));
     }
 
+    @Transactional
     public void updatePhoto(String photo) {
         Account currentUser = getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         currentUser.setPhoto(photo);
         repository.save(currentUser);
     }
-
-    public void updatePets(Pet pet) {
-        Account currentUser = getCurrentUser();
-        List<Pet> pets = currentUser.getPets();
-        pets.add(pet);
-        currentUser.setPets(pets);
-        repository.save(currentUser);
-    }
-
-    public void deletePet(String name){
-        Account currentUser = getCurrentUser();
-        List<Pet> pets = currentUser.getPets();
-        pets.removeIf(pet -> pet.getName().equals(name));
-        currentUser.setPets(pets);
-        repository.save(currentUser);
-    }
-
-//    @Deprecated
-//    public void setAdmin() {
-//        Account user = getCurrentUser();
-//        user.setAuthorities(Set.of(Role.ADMIN));
-//        repository.save(user);
-//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
